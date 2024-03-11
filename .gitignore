@@ -1,0 +1,31 @@
+
+Copy code
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local development settings
+.env
+
+# Virtual environment
+venv/
+env/
+*.pyc
+*.pyo
+*.pyd
+
+# Django generated files
+db.sqlite3
+*.log
+__pycache__/
+
+# Media files
+media/
+
+# Static files
+static/
+
+# Ignore migration files, except __init__.py
+**/migrations/*
+!**/migrations/__init__.py
