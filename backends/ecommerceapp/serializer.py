@@ -48,10 +48,28 @@ class UserSerializer(serializers.ModelSerializer):
     
 class UserSerializedWithToken(serializers.ModelSerializer):
     token= serializers.SerializerMethodField(read_only=True)
+    id=serializers.SerializerMethodField(read_only=True)
+    name=serializers.SerializerMethodField(read_only=True)
+    isAdmin=serializers.SerializerMethodField(read_only=True)
     class Meta:
         model=User
-        fields= ('id', 'email', 'username', 'token', 'isAdmin', 'name')
+        fields= ('id', 'email', 'username', 'name', 'isAdmin', 'token' )
     
     def get_token(self,obj):
         token= RefreshToken.for_user(obj)
         return str(token.access_token) 
+    def get_name(self,obj):
+        firstname=obj.first_name
+        lastname=obj.last_name
+        name= f"{firstname} {lastname}".strip()
+        if not name :
+            name='Set your Name'
+            return name
+        else:
+            return name
+    
+    def get_id(self,obj):
+        return obj.id
+
+    def get_isAdmin(self,obj):
+        return obj.is_staff
