@@ -20,11 +20,11 @@ const LoginScreen = () => {
         password: "",
     })
 
-    // useEffect(() => {
-    //     if (currentUser) {
-    //         navigate("/");
-    //     }
-    // }, [currentUser]);
+    useEffect(() => {
+        if (currentUser) {
+            navigate("/");
+        }
+    }, [currentUser]);
 
     const submitHandler = async (e) => {
         e.preventDefault();
@@ -44,7 +44,6 @@ const LoginScreen = () => {
         }
     }
 
-    console.log('redux error', error)
     return (
         <Container className='mt-3'>
             <Row>

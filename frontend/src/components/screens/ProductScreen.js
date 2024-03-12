@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
@@ -11,10 +11,14 @@ import Rating from '../Rating'
 import { useDispatch, useSelector } from 'react-redux'
 import { productDetailFailure, productDetailStart, productDetailSuccess } from '../../redux/reducers/productReducer'
 import Loader from '../Loader'
+import { FormControl } from 'react-bootstrap'
+import { addToCart } from '../../redux/reducers/cartReducer'
 
 const ProductScreen = () => {
     const { id } = useParams()
+    const [qty, setQty] = useState(1)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const { product, loading } = useSelector((state) => state.product)
 
     useEffect(() => {
@@ -26,16 +30,27 @@ const ProductScreen = () => {
                         dispatch(productDetailSuccess(res.data))
                     }
                 }).catch((err) => {
-                    dispatch(productDetailFailure(err?.message))
+                    dispatch(productDetailFailure(err?.response?.data?.detail))
                 })
             } catch (error) {
                 dispatch(productDetailFailure(error?.message))
-                // console.log(error)
             }
         }
         fetchData()
     }, [id])
 
+    const cartHandler = () => {
+        const cartData = {
+            id,
+            name: product.productname,
+            image: product.image,
+            price: product.price,
+            stockCount: product.stockCount,
+            qty
+        }
+        dispatch(addToCart(cartData))
+        navigate(`/cart`)
+    }
     return (
         <Container>
             <div>
@@ -73,8 +88,31 @@ const ProductScreen = () => {
                                     <ListGroup.Item>
                                         {product?.stockcount > 0 ? "In Stock" : "Out Of Stock"}
                                     </ListGroup.Item>
+                                    {
+                                        product.stockcount > 0 && (
+                                            <ListGroup.Item>
+                                                <Row>
+                                                    <Col>Qty</Col>
+                                                    <Col xs={'auto'} className='my-1'>
+                                                        <FormControl as={'select'} value={qty} onChange={(e) => setQty(e.target.value)}>
+                                                            {
+                                                                [...Array(product.stockcount).keys()].map((x, index) => (
+                                                                    <option key={index} value={x + 1}>{x + 1}</option>
+                                                                ))
+                                                            }
+                                                        </FormControl>
+                                                    </Col>
+                                                </Row>
+                                            </ListGroup.Item>
+                                        )
+                                    }
                                     <ListGroup.Item>
-                                        <Button disabled={product?.stockcount === 0}>Add to Cart</Button>
+                                        <Button
+                                            disabled={product?.stockcount === 0}
+                                            onClick={cartHandler}
+                                        >
+                                            Add to Cart
+                                        </Button>
                                     </ListGroup.Item>
                                 </ListGroup>
                             </Col>

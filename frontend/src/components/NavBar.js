@@ -1,7 +1,21 @@
 import React from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { Navbar, Nav } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { signOutFailure, signOutStart, signOutSuccess } from '../redux/reducers/userReducer'
 const NavBar = () => {
+    const dispatch = useDispatch()
+    const naviagte = useNavigate()
+    const handleLogout = () => {
+        dispatch(signOutStart())
+        try {
+            dispatch(signOutSuccess())
+            naviagte('/login')
+        } catch (error) {
+            dispatch(signOutFailure(error?.message))
+        }
+    }
     return (
         <>
             <Navbar className="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
@@ -26,7 +40,7 @@ const NavBar = () => {
                             </li>
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="/"
-                                    role="button" aria-haspopup="true" aria-expanded="false">New User?</a>
+                                    role="button" aria-haspopup="true" aria-expanded="false">User</a>
                                 <div className="dropdown-menu">
                                     <LinkContainer to={'/login'}>
                                         <Nav.Link className="dropdown-item">Log in</Nav.Link>
@@ -34,10 +48,9 @@ const NavBar = () => {
                                     <LinkContainer to={'/signup'}>
                                         <Nav.Link className="dropdown-item">Sign Up</Nav.Link>
                                     </LinkContainer>
-                                    <div className="dropdown-divider"></div>
-                                    <LinkContainer to={'/'}>
-                                        <Nav.Link className="dropdown-item">Log out</Nav.Link>
-                                    </LinkContainer>
+                                    <div className="dropdown-divider" />
+                                    <Nav.Link className="dropdown-item" onClick={handleLogout}>Log out</Nav.Link>
+
                                 </div>
                             </li>
                         </ul>

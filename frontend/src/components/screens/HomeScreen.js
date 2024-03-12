@@ -21,7 +21,7 @@ const HomeScreen = () => {
                         dispatch(productListSuccess(res.data))
                     }
                 }).catch((err) => {
-                    dispatch(productListFailure(err?.message))
+                    dispatch(productListFailure(err?.response?.data?.detail))
                 })
             } catch (error) {
                 dispatch(productListFailure(error?.message))
