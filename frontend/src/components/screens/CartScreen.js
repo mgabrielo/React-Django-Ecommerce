@@ -24,7 +24,7 @@ const CartScreen = () => {
                 <Col md={8}>
                     <h3>Cart Items</h3>
                     {
-                        cartState && cartState?.length > 0 && (
+                        cartState && cartState?.length > 0 ? (
                             <ListGroup variant='flush' className='mt-4'>
                                 {
                                     cartState.map((item) => (
@@ -52,6 +52,8 @@ const CartScreen = () => {
                                     ))
                                 }
                             </ListGroup>
+                        ) : (
+                            <Row>No Cart items Available</Row>
                         )
                     }
                 </Col>
