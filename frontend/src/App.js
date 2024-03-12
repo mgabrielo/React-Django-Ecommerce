@@ -21,7 +21,6 @@ export default function App() {
           <Route path='/cart' element={<CartScreen />} />
           <Route path='/product/:id' element={<ProductScreen />} />
         </Routes>
-        <Footer />
       </div>
     </>
   )
